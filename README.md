@@ -1,10 +1,69 @@
 # 🔍 Salesforce Test Automation Tools Overview
 
-This document provides a summary of key tools and approaches used for testing Salesforce applications. Each section includes a description, example Java code (where applicable), integration steps, pros, cons, and an assessment of whether the tool is worth using in a real-world SDET context.
+---
+
+## Why Understanding Apex Matters
+
+### 📌 Description:
+
+Apex is the proprietary programming language of Salesforce, similar to Java, used to implement business logic like triggers, classes, and batch processes. For SDETs, knowing Apex provides an edge in white-box testing, code review, and better understanding of the system’s inner workings.
+
+### ➕ Benefits:
+
+* Understand how business logic is implemented
+* Create or modify unit/integration tests in Apex
+* Contribute to static code analysis
+* Debug failed test runs using Apex logs
+
+### ⚠️ Limitations:
+
+* Not transferable outside Salesforce
+* Requires permissions and familiarity with Salesforce org setup
+
+### 💬 Worth Learning?
+
+✔️ Yes, especially for test engineers working closely with dev teams.
 
 ---
 
-## 1. Provar
+## Realfire
+
+### 📌 Description:
+
+Realfire is a test automation platform designed specifically for Salesforce with support for Lightning Web Components (LWC), Flows, and Classic UI. It provides both low-code and script-based automation, plus AI-based selector intelligence.
+
+### ✅ Features:
+
+* Native Salesforce awareness
+* AI-driven element identification
+* End-to-end test coverage with visual validations
+* Integration with Jira, TestRail, Jenkins, and more
+
+### 🔧 Integration:
+
+* Web-based SaaS platform (no installation needed)
+* Supports CI/CD pipelines
+* Test results exportable in multiple formats
+
+### ➕ Pros:
+
+* Built for Salesforce end-users and QA
+* Easy to maintain tests when Lightning DOM changes
+* Good visual test reporting
+
+### ➖ Cons:
+
+* Commercial license required
+* Requires initial learning for advanced features
+* For more advanced functionality like bulk operations, metadata deployments, debug log viewers, scheduled jobs, and multi-org support you’ll need a paid subscription
+
+### 💬 Worth Using?
+
+✔️ Yes, for teams needing reliable Salesforce UI automation with minimal code and high stability.
+
+---
+
+## Provar
 
 ### 📌 Description:
 
@@ -38,7 +97,7 @@ Provar does not use Java code directly — tests are created through a UI-based 
 
 ---
 
-## 2. Salesforce DX (SFDX CLI) + Postman / RestAssured
+## Salesforce DX (SFDX CLI) + Postman / RestAssured
 
 ### 📌 Description:
 
@@ -60,7 +119,7 @@ response.then().statusCode(200);
 * Install SFDX CLI
 * Authenticate with Salesforce org
 * Use in shell scripts or Jenkins pipelines
-* For Java: add RestAssured via Maven:
+* For Java: add RestAssured via Maven/Gradle:
 
 ```xml
 <dependency>
@@ -88,82 +147,9 @@ response.then().statusCode(200);
 
 ---
 
-## 3. Testim / Playwright / TestCafe
+# Interesting to know
 
-### 📌 Description:
-
-UI testing tools with AI-enhanced selector support. Playwright is open-source and maintained by Microsoft.
-
-### ✅ Example Java Usage (Playwright + Java):
-
-```java
-try (Playwright playwright = Playwright.create()) {
-  Browser browser = playwright.chromium().launch();
-  Page page = browser.newPage();
-  page.navigate("https://login.salesforce.com");
-  page.fill("input#username", "your_username");
-  page.fill("input#password", "your_password");
-  page.click("input#Login");
-}
-```
-
-### ⚙️ How to Integrate:
-
-* Install Node.js (for Playwright/TestCafe)
-* Use Java bindings for Playwright via Maven/Gradle
-* Configure in CI pipelines
-
-### ➕ Pros:
-
-* Fast, reliable UI tests
-* Open-source (Playwright/TestCafe)
-* Multi-browser support
-
-### ➖ Cons:
-
-* Not natively aware of Salesforce Lightning DOM
-* Requires manual handling of dynamic selectors
-
-### 💬 Worth It?
-
-✔️ Yes, with custom effort for Salesforce selectors.
-
----
-
-## 4. Robot Framework (Selenium/Requests)
-
-### 📌 Description:
-
-Keyword-driven automation framework for UI and API testing.
-
-### ✅ Example Java Usage:
-
-Robot Framework uses its own syntax. Java is used only if extended via JAR libraries.
-
-### ⚙️ How to Integrate:
-
-* Install Python + Robot Framework
-* Add SeleniumLibrary and RequestsLibrary
-* Use with Jenkins and GitHub Actions
-
-### ➕ Pros:
-
-* Readable, maintainable tests
-* Combines UI + API
-* Large plugin ecosystem
-
-### ➖ Cons:
-
-* Not natively optimized for Salesforce
-* Needs customization for stability
-
-### 💬 Worth It?
-
-⚠️ For readable, mixed-skill teams. Limited for complex UI tests.
-
----
-
-## 5. Katalon Studio
+## Katalon Studio
 
 ### 📌 Description:
 
@@ -203,129 +189,11 @@ WebUI.click(findTestObject('login_button'))
 
 ---
 
-## 6. Apex Test Framework
-
-### 📌 Description:
-
-Salesforce-native framework for unit testing Apex code.
-
-### ✅ Example Apex Test:
-
-```apex
-@isTest
-private class AccountTests {
-  @isTest
-  static void testCreateAccount() {
-    Account acc = new Account(Name='Test');
-    insert acc;
-    System.assertNotEquals(null, acc.Id);
-  }
-}
-```
-
-### ⚙️ How to Integrate:
-
-* Write tests in Developer Console or VS Code (with Salesforce Extension Pack)
-* Run via SFDX CLI or Salesforce UI
-
-### ➕ Pros:
-
-* Required for deployment
-* Fast and native
-
-### ➖ Cons:
-
-* Only tests Apex logic
-* No UI or external integration testing
-
-### 💬 Worth It?
-
-✔️ Absolutely — mandatory for Salesforce deployments.
-
----
-
-## 7. Tosca Testsuite (Tricentis)
-
-### 📌 Description:
-
-Enterprise no-code test platform with strong Salesforce support.
-
-### ✅ Example Usage:
-
-* No direct Java code. Tests created using drag-and-drop modules.
-
-### ⚙️ How to Integrate:
-
-* Install Tosca Commander
-* Import Salesforce modules
-* Use with CI via Tosca CLI or DEX integration
-
-### ➕ Pros:
-
-* Good support for dynamic UI components
-* Centralized test management
-
-### ➖ Cons:
-
-* High licensing cost
-* Requires onboarding/training
-
-### 💬 Worth It?
-
-✔️ Yes, in large enterprises with extensive Salesforce usage.
-
----
-
-## 8. Contract Testing (Pact / Spring Cloud Contract)
-
-### 📌 Description:
-
-Validates API contracts between Salesforce and other services.
-
-### ✅ Example Java Usage (Pact):
-
-```java
-@PactTestFor(providerName = "OrderService")
-public void validateSalesforceConsumerPact() {
-  given()
-    .baseUri(mockProvider.getUrl())
-    .get("/orders/123")
-    .then()
-    .statusCode(200);
-}
-```
-
-### ⚙️ How to Integrate:
-
-* Add Pact to Maven/Gradle project
-* Define contracts in JSON
-* Validate in CI using provider tests
-
-### ➕ Pros:
-
-* Prevents breaking integrations
-* Good for microservice/API contracts
-
-### ➖ Cons:
-
-* Needs buy-in from both sides (provider & consumer)
-* Not applicable for UI
-
-### 💬 Worth It?
-
-✔️ Yes, in integration-heavy environments.
-
----
-
 ## 💾 Summary Table
 
 | Tool                  | UI Testing | API Testing | Native Salesforce Support | Free    | Java Code Support | Worth Using?                     |
 | --------------------- | ---------- | ----------- | ------------------------- | ------- | ----------------- | -------------------------------- |
+| Realfire           | ✅ Yes      | ❌ No        | ✅ Yes                     | ✅ Yes   | ❌ No              | ✔️ Best for UI/Flows in SFDC     |
 | Provar                | ✅ Yes      | ⚠️ Limited  | ✅ Yes                     | ❌ No    | ❌ No              | ✔️ For UI-heavy, budgeted teams  |
 | SFDX + RestAssured    | ❌ No       | ✅ Yes       | ✅ Yes                     | ✅ Yes   | ✅ Yes             | ✔️ Excellent for backend testing |
-| Playwright/Testim     | ✅ Yes      | ⚠️ Limited  | ⚠️ Partial                | ✅/❌     | ✅ Yes             | ✔️ Modern UI tests with setup    |
-| Robot Framework       | ✅ Yes      | ✅ Yes       | ❌ No                      | ✅ Yes   | ⚠️ Indirect       | ⚠️ For readable test cases       |
 | Katalon Studio        | ✅ Yes      | ✅ Yes       | ⚠️ Partial                | ⚠️ Some | ⚠️ Groovy only    | ⚠️ For low-code teams            |
-| Apex Test Framework   | ❌ No       | ✅ Yes       | ✅ Native                  | ✅ Yes   | ❌ Apex only       | ✔️ Required for deployments      |
-| Tosca                 | ✅ Yes      | ✅ Yes       | ✅ Native                  | ❌ No    | ❌ No              | ✔️ For enterprise use            |
-| Pact/Contract Testing | ❌ No       | ✅ Yes       | ❌ No                      | ✅ Yes   | ✅ Yes             | ✔️ For microservice contracts    |
